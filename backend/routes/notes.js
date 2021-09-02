@@ -5,7 +5,8 @@ router.get('/', (req, res)=>{
     obj = {
         a:1
     }
-    res.json(obj);
+    console.log(obj);
+    res.send(obj);
 })
 
 module.exports = router
