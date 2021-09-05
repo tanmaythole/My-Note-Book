@@ -4,6 +4,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fetchUser = require('../Middleware/fetchuser');
 
 const JWT_SECRET_KEY = 'My-note-book-tanmay-764464';
 
@@ -11,7 +12,7 @@ router.get('/', (req, res)=>{
     res.send("hello");
 })
 
-// Create A user using: POST api/auth/signup
+// Route 1: Create A user using: POST api/auth/signup
 router.post('/signup',[
     body('email', "Enter Valid Email").isEmail(),
     body('password', "Password Mush be more than 4 characters").isLength({min:4}),
@@ -54,7 +55,7 @@ router.post('/signup',[
     }
 });
 
-// Authenticate a User: POST api/auth/login
+// Route 2: Authenticate a User: POST api/auth/login
 router.post('/login', [
     body('email', "Enter a Valid Email").isEmail(),
     body('password', "Password Can not be blank").exists()
@@ -90,6 +91,17 @@ router.post('/login', [
     } catch (error) {
         res.status(500).send("Internal Server Occured");
     }
-})
+});
+
+// Route 3: Get user data : POST /api/auth/user/
+router.post('/user', fetchUser, async (req, res)=>{
+    try {
+        userId = req.user.id;
+        const user = await User.findById(userId).select("-password");
+        res.send(user);
+    } catch (error) {
+        res.status(500).send("Internal Server Occured");
+    }
+});
 
 module.exports = router;
