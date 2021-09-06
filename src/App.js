@@ -6,24 +6,29 @@ import {
   BrowserRouter as Router,
   Switch,
   Route
-} from 'react-router-dom'
+} from 'react-router-dom';
+import NoteState from './context/notes/NoteState';
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Navbar />
+    <>
+    <NoteState>
+      <Router>
+        <div className="App">
+          <Navbar />
 
-        <Switch>
-          <Route exact path="/about">
-            <About />
-          </Route>
-          <Route exact path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+          <Switch>
+            <Route exact path="/about">
+              <About />
+            </Route>
+            <Route exact path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </NoteState>
+    </>
   );
 }
 
