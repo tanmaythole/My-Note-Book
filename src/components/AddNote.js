@@ -27,21 +27,20 @@ const AddNote = () => {
             <Form>
                 <Form.Group className="mb-3">
                     <Form.Label>Title</Form.Label>
-                    <Form.Control type="text" id="title" name="title" onChange={onchange} />
+                    <Form.Control type="text" id="title" name="title" onChange={onchange} required />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control as="textarea" rows={3} id="description" name="description" onChange={onchange} />
+                    <Form.Control as="textarea" rows={3} id="description" name="description" onChange={onchange} required />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Tages</Form.Label>
-                    <Form.Control type="text" id="tags" name="tags" onChange={onchange} />
-                    <Form.Text className="text-muted"> Write tags seprated by commas. </Form.Text>
+                    <Form.Control type="text" id="tag" name="tag" onChange={onchange} />
                 </Form.Group>
 
-                <Button variant="primary" type="submit" onClick={handleAddNote}>
+                <Button disabled={formData.title.length<1 || formData.description.length<1} variant="success" type="submit" onClick={handleAddNote}>
                     Add Note
                 </Button>
             </Form>

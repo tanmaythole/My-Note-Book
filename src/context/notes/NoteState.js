@@ -41,7 +41,15 @@ const NoteState = (props) => {
       }
     });
     // const json = await response.json();
-    getNotes();
+    let newNotes = JSON.parse(JSON.stringify(notes));
+    for (let index = 0; index < newNotes.length; index++) {
+      const element = notes[index];
+      if(element._id===id){
+        newNotes.splice(index,1);
+        break;
+      }
+    }
+    setNotes(newNotes);
   }
 
   // Edit a Note

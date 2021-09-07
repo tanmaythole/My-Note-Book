@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Badge } from 'react-bootstrap';
 import {FaEdit, FaTrashAlt} from 'react-icons/fa';
 import NoteContext from '../context/notes/NoteContext';
 
@@ -15,7 +15,12 @@ const NoteItem = (props) => {
                     <Card.Text>
                         {note.description}
                     </Card.Text>
-                    <p>Last Updated on {new Date(note.date).toLocaleString()}</p>
+                    <Card.Text className="text-muted" style={{fontSize:'14px'}} >
+                        Last Updated on {new Date(note.date).toLocaleString()}
+                    </Card.Text>
+                    <div style={{top:0,right:0, position:'absolute', margin:0}}>
+                        <Badge bg="success">{note.tag}</Badge>
+                    </div>
                     <Button variant="primary" size="sm" onClick={()=>updateNote(note)}><FaEdit /></Button>{' '}
                     <Button variant="danger" size="sm" onClick={()=>deleteNote(note._id)}><FaTrashAlt /></Button>
                 </Card.Body>
