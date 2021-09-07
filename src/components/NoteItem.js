@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Card, Button } from 'react-bootstrap';
 import {FaEdit, FaTrashAlt} from 'react-icons/fa';
+import NoteContext from '../context/notes/NoteContext';
 
 const NoteItem = (props) => {
-    const { note } = props;
+    const context = useContext(NoteContext);
+    const {deleteNote} = context;
+    const { note, updateNote } = props;
     return (
         <div className="col-md-3 mb-4">
             <Card>
@@ -12,8 +15,9 @@ const NoteItem = (props) => {
                     <Card.Text>
                         {note.description}
                     </Card.Text>
-                    <Button variant="primary" size="sm"><FaEdit /></Button>{' '}
-                    <Button variant="danger" size="sm"><FaTrashAlt /></Button>
+                    <p>Last Updated on {new Date(note.date).toLocaleString()}</p>
+                    <Button variant="primary" size="sm" onClick={()=>updateNote(note)}><FaEdit /></Button>{' '}
+                    <Button variant="danger" size="sm" onClick={()=>deleteNote(note._id)}><FaTrashAlt /></Button>
                 </Card.Body>
             </Card>
         </div>
