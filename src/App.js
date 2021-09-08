@@ -11,6 +11,8 @@ import {
 import NoteState from './context/notes/NoteState';
 import { Container } from 'react-bootstrap';
 import AddNote from './components/AddNote';
+import Login from './components/Login';
+import Signup from './components/Signup';
 
 function App() {
   return (
@@ -26,6 +28,12 @@ function App() {
               </Route>
               <Route exact path="/add">
                 <AddNote />
+              </Route>
+              <Route exact path="/login">
+                <Login />
+              </Route>
+              <Route exact path="/signup">
+                <Signup />
               </Route>
               <Route exact path="/">
                 <Home />

@@ -1,14 +1,17 @@
 import NoteContext from "./NoteContext";
 import { useState } from "react";
 
+
+
 const NoteState = (props) => {
-  const siteURL = 'http://localhost:5000'
   const initialNotes = [];
-  const [notes, setNotes] = useState(initialNotes)
+  const [notes, setNotes] = useState(initialNotes);
+  const BackendURL = process.env.REACT_APP_BACKEND_URL;
+  console.log(BackendURL);
 
   // Fetching all notes
   const getNotes = async ()=>{
-    const response = await fetch(`${siteURL}/api/notes/fetchallnotes`, {
+    const response = await fetch(`${BackendURL}/api/notes/fetchallnotes`, {
       method: 'GET',
       headers: {
         'Content-Type':'application/json',
@@ -21,7 +24,7 @@ const NoteState = (props) => {
 
   // Add a new Note
   const addNote = async ({title, description, tag}) => {
-    const response = await fetch(`${siteURL}/api/notes/add`, {
+    const response = await fetch(`${BackendURL}/api/notes/add`, {
       method: 'POST',
       headers: {
         'Content-Type':'application/json',
@@ -33,7 +36,7 @@ const NoteState = (props) => {
 
   // Delete a Note
   const deleteNote = async (id) => {
-    const response = await fetch(`${siteURL}/api/notes/delete/${id}`, {
+    const response = await fetch(`${BackendURL}/api/notes/delete/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type':'application/json',
@@ -54,7 +57,7 @@ const NoteState = (props) => {
 
   // Edit a Note
   const editNote = async (enote) => {
-    const response = await fetch(`${siteURL}/api/notes/update/${enote._id}`, {
+    const response = await fetch(`${BackendURL}/api/notes/update/${enote._id}`, {
       method: 'PUT',
       headers: {
         'Content-Type':'application/json',

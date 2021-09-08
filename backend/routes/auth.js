@@ -86,7 +86,7 @@ router.post('/login', [
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET_KEY);
-        res.json({authToken});
+        res.json({"status":"ok", authToken});
 
     } catch (error) {
         res.status(500).send("Internal Server Occured");
