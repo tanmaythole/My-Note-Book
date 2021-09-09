@@ -3,16 +3,17 @@ import Navbar from './components/NavBar';
 import Home from './components/Home';
 import About from './components/About';
 import AlertComponent from './components/AlertComponent';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom';
 import NoteState from './context/notes/NoteState';
 import { Container } from 'react-bootstrap';
 import AddNote from './components/AddNote';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom';
 
 function App() {
   return (
@@ -34,6 +35,9 @@ function App() {
               </Route>
               <Route exact path="/signup">
                 <Signup />
+              </Route>
+              <Route exact path="/logout">
+                {localStorage.getItem('auth-token')?(localStorage.removeItem('auth-token')):<Redirect to="/" />}
               </Route>
               <Route exact path="/">
                 <Home />
