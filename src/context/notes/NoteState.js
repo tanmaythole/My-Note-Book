@@ -7,7 +7,7 @@ const NoteState = (props) => {
   const initialNotes = [];
   const [notes, setNotes] = useState(initialNotes);
   const BackendURL = process.env.REACT_APP_BACKEND_URL;
-  const authToken = sessionStorage.getItem('auth-token');
+  const authToken = localStorage.getItem('auth-token');
 
   // Fetching all notes
   const getNotes = async ()=>{

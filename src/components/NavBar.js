@@ -7,7 +7,7 @@ import { Link, useHistory } from 'react-router-dom';
 const NavBar = () => {
     const history = useHistory();
     const handleLogout = () => {
-        sessionStorage.removeItem('auth-token');
+        localStorage.removeItem('auth-token');
         history.push('/login');
     }
     return (
@@ -25,7 +25,7 @@ const NavBar = () => {
                         </LinkContainer>
                     </Nav>
                     <div>
-                        {sessionStorage.getItem('auth-token')?(
+                        {localStorage.getItem('auth-token')?(
                         <>
                             <Link to="/add"><Button variant="success">Add Note</Button></Link>{' '}
                             <Button variant="danger" onClick={handleLogout}>LogOut</Button>

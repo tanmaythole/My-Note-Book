@@ -45,7 +45,7 @@ function App() {
               <Route exact path="/signup">
                 <Signup showAlert={showAlert} />
               </Route>
-              {sessionStorage.getItem('auth-token')?(
+              {localStorage.getItem('auth-token')?(
                 <>
                   <Route exact path="/add">
                     <AddNote showAlert={showAlert} />

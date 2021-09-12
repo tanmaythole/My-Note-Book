@@ -16,7 +16,7 @@ const Login = ({showAlert}) => {
         });
         const json = await response.json();
         if(json.status==='ok'){
-            sessionStorage.setItem('auth-token', json.authToken);
+            localStorage.setItem('auth-token', json.authToken);
             showAlert("Login Successful", 'success');
         } else {
             showAlert("Invalid Credentials", 'danger');
@@ -27,7 +27,7 @@ const Login = ({showAlert}) => {
         setCredentials({...credentials, [e.target.name]:e.target.value});
     }
 
-    if(sessionStorage.getItem('auth-token')){
+    if(localStorage.getItem('auth-token')){
         return (
             <Redirect to="/" />
         );

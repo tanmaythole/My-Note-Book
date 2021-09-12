@@ -20,7 +20,7 @@ const Signup = ({showAlert}) => {
         });
         const json = await response.json();
         if(json.status==="ok"){
-            sessionStorage.setItem('auth-token', json.authToken);
+            localStorage.setItem('auth-token', json.authToken);
             showAlert("SignUp Successful", 'success');
         } else {
             showAlert("Invalid Data", 'danger');
@@ -31,7 +31,7 @@ const Signup = ({showAlert}) => {
         setFormData({...formData, [e.target.name]:e.target.value})
     }
     
-    if(sessionStorage.getItem('auth-token')){
+    if(localStorage.getItem('auth-token')){
         return (
             <Redirect to="/" />
         );
