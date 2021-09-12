@@ -14,7 +14,7 @@ const Home = ({showAlert}) => {
     // Fetch all notes
     useEffect(() => {
         getNotes();
-    }, [])
+    }, [getNotes])
 
     // Get Data of selected note
     const updateNote = async (note) => {

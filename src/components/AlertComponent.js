@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { Alert } from 'react-bootstrap';
 
 const AlertComponent = ({alert}) => {
@@ -14,7 +14,7 @@ const AlertComponent = ({alert}) => {
   }
   else{
     return(
-      <div style={{height:"58px"}}></div>
+      <div style={{height:"58px", marginBottom:'1rem'}}></div>
     );
   }
 }

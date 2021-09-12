@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
+import { Redirect } from 'react-router-dom';
 
 const Signup = ({showAlert}) => {
     const [formData, setFormData] = useState({"name":"", "email":"", "password":"", "cpassword":""})
@@ -19,7 +20,7 @@ const Signup = ({showAlert}) => {
         });
         const json = await response.json();
         if(json.status==="ok"){
-            localStorage.setItem('auth-token', json.authToken);
+            sessionStorage.setItem('auth-token', json.authToken);
             showAlert("SignUp Successful", 'success');
         } else {
             showAlert("Invalid Data", 'danger');
@@ -28,6 +29,12 @@ const Signup = ({showAlert}) => {
 
     const onchange = (e) => {
         setFormData({...formData, [e.target.name]:e.target.value})
+    }
+    
+    if(sessionStorage.getItem('auth-token')){
+        return (
+            <Redirect to="/" />
+        );
     }
     return (
         <div className="col-md-4 m-auto">

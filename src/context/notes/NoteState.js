@@ -7,7 +7,7 @@ const NoteState = (props) => {
   const initialNotes = [];
   const [notes, setNotes] = useState(initialNotes);
   const BackendURL = process.env.REACT_APP_BACKEND_URL;
-  console.log(BackendURL);
+  const authToken = sessionStorage.getItem('auth-token');
 
   // Fetching all notes
   const getNotes = async ()=>{
@@ -15,7 +15,7 @@ const NoteState = (props) => {
       method: 'GET',
       headers: {
         'Content-Type':'application/json',
-        'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzNGFjNWM5ZDlkZDBlZTEyZmEyMjE3In0sImlhdCI6MTYzMDg0Njg2OX0.UX5fueMNU8r496nzHs8apQFmnw9vQRhXaFxGbO3mtUc'
+        'auth-token':authToken
       }
     });
     const json = await response.json();
@@ -28,7 +28,7 @@ const NoteState = (props) => {
       method: 'POST',
       headers: {
         'Content-Type':'application/json',
-        'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzNGFjNWM5ZDlkZDBlZTEyZmEyMjE3In0sImlhdCI6MTYzMDg0Njg2OX0.UX5fueMNU8r496nzHs8apQFmnw9vQRhXaFxGbO3mtUc'
+        'auth-token':authToken
       },
       body: JSON.stringify({title, description, tag})
     });
@@ -45,7 +45,7 @@ const NoteState = (props) => {
       method: 'DELETE',
       headers: {
         'Content-Type':'application/json',
-        'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzNGFjNWM5ZDlkZDBlZTEyZmEyMjE3In0sImlhdCI6MTYzMDg0Njg2OX0.UX5fueMNU8r496nzHs8apQFmnw9vQRhXaFxGbO3mtUc'
+        'auth-token':authToken
       }
     });
     const json = await response.json();
@@ -70,7 +70,7 @@ const NoteState = (props) => {
       method: 'PUT',
       headers: {
         'Content-Type':'application/json',
-        'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzNGFjNWM5ZDlkZDBlZTEyZmEyMjE3In0sImlhdCI6MTYzMDg0Njg2OX0.UX5fueMNU8r496nzHs8apQFmnw9vQRhXaFxGbO3mtUc'
+        'auth-token':authToken
       },
       body: JSON.stringify({"title":enote.title, "description":enote.description, "tag":enote.tag})
     });

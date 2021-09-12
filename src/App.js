@@ -39,21 +39,24 @@ function App() {
               <Route exact path="/about">
                 <About />
               </Route>
-              <Route exact path="/add">
-                <AddNote showAlert={showAlert} />
-              </Route>
               <Route exact path="/login">
                 <Login showAlert={showAlert} />
               </Route>
               <Route exact path="/signup">
                 <Signup showAlert={showAlert} />
               </Route>
-              <Route exact path="/logout">
-                {/* {localStorage.getItem('auth-token')?(localStorage.removeItem('auth-token')):<Redirect to="/" />} */}
-              </Route>
-              <Route exact path="/">
-                <Home showAlert={showAlert} />
-              </Route>
+              {sessionStorage.getItem('auth-token')?(
+                <>
+                  <Route exact path="/add">
+                    <AddNote showAlert={showAlert} />
+                  </Route>
+                  <Route exact path="/">
+                    <Home showAlert={showAlert} />
+                  </Route>
+                </>
+              ):(
+                <Redirect to="/login" />
+              )}
               <Route>
                 <h1>No Route</h1>
               </Route>
