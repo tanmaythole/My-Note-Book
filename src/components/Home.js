@@ -4,7 +4,7 @@ import { Row, Modal, Button, Form } from 'react-bootstrap';
 import NoteContext from '../context/notes/NoteContext';
 import NoteItem from './NoteItem';
 
-const Home = () => {
+const Home = ({showAlert}) => {
     const context = useContext(NoteContext);
     const { notes, getNotes, editNote } = context;
 
@@ -38,7 +38,11 @@ const Home = () => {
 
     // handle edit note function
     const handleEditNote = async () => {
-        editNote(currNote);
+        if(editNote(currNote)){
+            showAlert("Note Updated Successfully", "success");
+        } else {
+            showAlert("Something Went Wrong", "danger");
+        }
         toggleModal();
     }
     return (
@@ -80,7 +84,7 @@ const Home = () => {
             {notes.length===0 && "No Items to display"}
             <Row className="py-2">
                 {notes.map((note) => {
-                    return <NoteItem key={note._id} updateNote={updateNote} note={note} />
+                    return <NoteItem key={note._id} updateNote={updateNote} showAlert={showAlert} note={note} />
                 })}
             </Row>
         </div>

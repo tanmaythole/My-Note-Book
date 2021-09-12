@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 
-const Signup = () => {
+const Signup = ({showAlert}) => {
     const [formData, setFormData] = useState({"name":"", "email":"", "password":"", "cpassword":""})
 
     const handleSignup = async (e)=> {
@@ -20,9 +20,9 @@ const Signup = () => {
         const json = await response.json();
         if(json.status==="ok"){
             localStorage.setItem('auth-token', json.authToken);
-            alert("Signup Successful");
+            showAlert("SignUp Successful", 'success');
         } else {
-            alert("Invalid Data");
+            showAlert("Invalid Data", 'danger');
         }
     }
 

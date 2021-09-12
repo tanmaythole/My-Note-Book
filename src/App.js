@@ -1,4 +1,5 @@
 import './App.css';
+import { useState } from 'react';
 import Navbar from './components/NavBar';
 import Home from './components/Home';
 import About from './components/About';
@@ -16,31 +17,42 @@ import {
 } from 'react-router-dom';
 
 function App() {
+  const [alert, setAlert] = useState({"type":"", "message":""});
+  
+  const showAlert = (message, type) => {
+    setAlert({
+      message:message,
+      type:type
+    })
+    setTimeout(() => {
+      setAlert({"type":"", "message":""});
+    }, 1500);
+  }
   return (
     <>
     <NoteState>
       <Router>
           <Navbar />
-          <AlertComponent type="" />
+          <AlertComponent alert={alert} />
           <Container>
             <Switch>
               <Route exact path="/about">
                 <About />
               </Route>
               <Route exact path="/add">
-                <AddNote />
+                <AddNote showAlert={showAlert} />
               </Route>
               <Route exact path="/login">
-                <Login />
+                <Login showAlert={showAlert} />
               </Route>
               <Route exact path="/signup">
-                <Signup />
+                <Signup showAlert={showAlert} />
               </Route>
               <Route exact path="/logout">
-                {localStorage.getItem('auth-token')?(localStorage.removeItem('auth-token')):<Redirect to="/" />}
+                {/* {localStorage.getItem('auth-token')?(localStorage.removeItem('auth-token')):<Redirect to="/" />} */}
               </Route>
               <Route exact path="/">
-                <Home />
+                <Home showAlert={showAlert} />
               </Route>
               <Route>
                 <h1>No Route</h1>

@@ -32,6 +32,11 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({title, description, tag})
     });
+    const json = await response.json();
+    if(json.status==='ok'){
+      return true;
+    }
+    return false;
   }
 
   // Delete a Note
@@ -43,7 +48,7 @@ const NoteState = (props) => {
         'auth-token':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzNGFjNWM5ZDlkZDBlZTEyZmEyMjE3In0sImlhdCI6MTYzMDg0Njg2OX0.UX5fueMNU8r496nzHs8apQFmnw9vQRhXaFxGbO3mtUc'
       }
     });
-    // const json = await response.json();
+    const json = await response.json();
     let newNotes = JSON.parse(JSON.stringify(notes));
     for (let index = 0; index < newNotes.length; index++) {
       const element = notes[index];
@@ -53,6 +58,10 @@ const NoteState = (props) => {
       }
     }
     setNotes(newNotes);
+    if(json.success){
+      return true;
+    }
+    return false;
   }
 
   // Edit a Note
@@ -75,6 +84,10 @@ const NoteState = (props) => {
       }
     }
     setNotes(newNotes);
+    if(json.status==='ok'){
+      return true;
+    }
+    return false;
   }
 
   return(

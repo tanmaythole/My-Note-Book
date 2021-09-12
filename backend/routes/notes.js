@@ -33,7 +33,7 @@ router.post('/add', fetchUser, [
             });
             const savedNote = await note.save();
             
-            res.json({savedNote});
+            res.json({"status":"ok", savedNote});
 
         } catch (error) {
             res.status(500).send("Internal Server Occured");
@@ -57,7 +57,7 @@ router.put('/update/:id', fetchUser, async (req, res)=>{
         }
 
         note = await Notes.findByIdAndUpdate(req.params.id, {$set:{title, description, tag}}, {new:true});
-        res.json({note});
+        res.json({"status":"ok", note});
 
     } catch (error) {
         res.status(500).send("Internal Server Occured");

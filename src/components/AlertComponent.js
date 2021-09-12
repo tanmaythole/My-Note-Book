@@ -1,13 +1,14 @@
 import React, {useState} from 'react'
 import { Alert } from 'react-bootstrap';
 
-const AlertComponent = (props) => {
-    const [show, setShow] = useState(props.type!==""?true:false);
-
-  if (show) {
+const AlertComponent = ({alert}) => {
+  const capitalize = (str) => {
+    return str.charAt(0).toUpperCase()+str.slice(1);
+  }
+  if (alert.type) {
     return (
-      <Alert variant={props.type} onClose={() => setShow(false)} dismissible className="d-flex align-items-center">
-        <strong>{props.type}</strong> {props.message}
+      <Alert variant={alert.type} className="d-flex align-items-center">
+        <strong>{alert.type==='danger'?"Error":capitalize(alert.type)}!&nbsp;</strong>{alert.message}
       </Alert>
     );
   }

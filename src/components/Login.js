@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { Form, Button } from 'react-bootstrap';
 
-const Login = () => {
+const Login = ({showAlert}) => {
     const [credentials, setCredentials] = useState({"email":"", "password":""});
     const handleLogin = async (e)=> {
         e.preventDefault();
@@ -15,9 +15,9 @@ const Login = () => {
         const json = await response.json();
         if(json.status=='ok'){
             localStorage.setItem('auth-token', json.authToken);
-            alert('login Successful');
+            showAlert("Login Successful", 'success');
         } else {
-            alert("Enter correct Credentials");
+            showAlert("Invalid Credentials", 'danger');
         }
     }
 

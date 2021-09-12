@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap'
 import NoteContext from '../context/notes/NoteContext'
 import { useHistory } from "react-router";
 
-const AddNote = () => {
+const AddNote = ({showAlert}) => {
     const context = useContext(NoteContext);
     const history = useHistory();
     const {addNote} = context;
@@ -18,8 +18,13 @@ const AddNote = () => {
     // handle add note form
     const handleAddNote = (e) => {
         e.preventDefault();
-        addNote(formData);
-        history.push('/');
+        if(addNote(formData)){
+            showAlert("Note Added Successfully", "success");
+            history.push('/');
+        }
+        else{
+            showAlert("Something Went Wrong", "danger");
+        }
     }
     return (
         <div className="col-md-6 m-auto">
