@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
+import AuthContext from '../context/auth/AuthContext';
 
 const NavBar = () => {
+    // Using auth context api
+    const authContext = useContext(AuthContext);
+    const { loggedin, setLoggedin, setAuthToken } = authContext;
+
     const history = useHistory();
     const handleLogout = () => {
         localStorage.removeItem('auth-token');
+        setLoggedin(false);
+        setAuthToken("");
         history.push('/login');
     }
     return (
@@ -25,7 +32,7 @@ const NavBar = () => {
                         </LinkContainer>
                     </Nav>
                     <div>
-                        {localStorage.getItem('auth-token')?(
+                        {loggedin?(
                         <>
                             <Link to="/add"><Button variant="success">Add Note</Button></Link>{' '}
                             <Button variant="danger" onClick={handleLogout}>LogOut</Button>

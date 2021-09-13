@@ -1,9 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Form, Button } from 'react-bootstrap'
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import AuthContext from '../context/auth/AuthContext';
+
 
 const Signup = ({showAlert}) => {
+    // Using auth context api
+    const authContext = useContext(AuthContext);
+    const { loggedin, setLoggedin, authToken, setAuthToken } = authContext;
+
     const [formData, setFormData] = useState({"name":"", "email":"", "password":"", "cpassword":""})
+    
+    const history = useHistory();
 
     const handleSignup = async (e)=> {
         e.preventDefault();
@@ -21,7 +29,10 @@ const Signup = ({showAlert}) => {
         const json = await response.json();
         if(json.status==="ok"){
             localStorage.setItem('auth-token', json.authToken);
+            setLoggedin(true);
+            setAuthToken(localStorage.getItem('auth-token'));
             showAlert("SignUp Successful", 'success');
+            history.push('/');
         } else {
             showAlert("Invalid Data", 'danger');
         }
@@ -31,11 +42,11 @@ const Signup = ({showAlert}) => {
         setFormData({...formData, [e.target.name]:e.target.value})
     }
     
-    if(localStorage.getItem('auth-token')){
-        return (
-            <Redirect to="/" />
-        );
-    }
+    // if(localStorage.getItem('auth-token')){
+    //     return (
+    //         <Redirect to="/" />
+    //     );
+    // }
     return (
         <div className="col-md-4 m-auto">
             <h1 className="text-center">Create An Account</h1>

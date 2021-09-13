@@ -1,10 +1,15 @@
-import React, {useState} from 'react'
+import React, {useState, useContext } from 'react'
 import { Form, Button } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
+import AuthContext from '../context/auth/AuthContext';
 
-const Login = ({showAlert}) => {
+const Login = ({showAlert}) => {// Using auth context api
+    const authContext = useContext(AuthContext);
+    const { loggedin, setLoggedin, authToken, setAuthToken } = authContext;
+
     const [credentials, setCredentials] = useState({"email":"", "password":""});
 
+    const history = useHistory();
     const handleLogin = async (e)=> {
         e.preventDefault();
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
@@ -17,7 +22,11 @@ const Login = ({showAlert}) => {
         const json = await response.json();
         if(json.status==='ok'){
             localStorage.setItem('auth-token', json.authToken);
+            setLoggedin(true);
+            setAuthToken(localStorage.getItem('auth-token'));
             showAlert("Login Successful", 'success');
+            history.push('/');
+
         } else {
             showAlert("Invalid Credentials", 'danger');
         }
@@ -27,10 +36,10 @@ const Login = ({showAlert}) => {
         setCredentials({...credentials, [e.target.name]:e.target.value});
     }
 
-    if(localStorage.getItem('auth-token')){
-        return (
+    if(loggedin){
+        return(
             <Redirect to="/" />
-        );
+        )
     }
     return (
         <div className="col-md-4 m-auto">

@@ -1,13 +1,16 @@
 import NoteContext from "./NoteContext";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import AuthContext from "../auth/AuthContext";
 
 
 
 const NoteState = (props) => {
+  const authContext = useContext(AuthContext);
+  const { loggedin, authToken } = authContext;
+console.log(loggedin);
   const initialNotes = [];
   const [notes, setNotes] = useState(initialNotes);
   const BackendURL = process.env.REACT_APP_BACKEND_URL;
-  const authToken = localStorage.getItem('auth-token');
 
   // Fetching all notes
   const getNotes = async ()=>{
