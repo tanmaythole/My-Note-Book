@@ -6,8 +6,8 @@ import AuthContext from "../auth/AuthContext";
 
 const NoteState = (props) => {
   const authContext = useContext(AuthContext);
-  const { loggedin, authToken } = authContext;
-console.log(loggedin);
+  const { authToken } = authContext;
+  
   const initialNotes = [];
   const [notes, setNotes] = useState(initialNotes);
   const BackendURL = process.env.REACT_APP_BACKEND_URL;

@@ -7,7 +7,7 @@ import AuthContext from '../context/auth/AuthContext';
 const Signup = ({showAlert}) => {
     // Using auth context api
     const authContext = useContext(AuthContext);
-    const { loggedin, setLoggedin, authToken, setAuthToken } = authContext;
+    const { loggedin, setLoggedin, setAuthToken } = authContext;
 
     const [formData, setFormData] = useState({"name":"", "email":"", "password":"", "cpassword":""})
     
@@ -42,11 +42,11 @@ const Signup = ({showAlert}) => {
         setFormData({...formData, [e.target.name]:e.target.value})
     }
     
-    // if(localStorage.getItem('auth-token')){
-    //     return (
-    //         <Redirect to="/" />
-    //     );
-    // }
+    if(loggedin){
+        setTimeout(() => {
+            history.push('/');
+        }, 1500);
+    }
     return (
         <div className="col-md-4 m-auto">
             <h1 className="text-center">Create An Account</h1>

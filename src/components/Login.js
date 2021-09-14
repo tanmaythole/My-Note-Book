@@ -1,11 +1,11 @@
 import React, {useState, useContext } from 'react'
 import { Form, Button } from 'react-bootstrap';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import AuthContext from '../context/auth/AuthContext';
 
 const Login = ({showAlert}) => {// Using auth context api
     const authContext = useContext(AuthContext);
-    const { loggedin, setLoggedin, authToken, setAuthToken } = authContext;
+    const { loggedin, setLoggedin, setAuthToken } = authContext;
 
     const [credentials, setCredentials] = useState({"email":"", "password":""});
 
@@ -25,8 +25,6 @@ const Login = ({showAlert}) => {// Using auth context api
             setLoggedin(true);
             setAuthToken(localStorage.getItem('auth-token'));
             showAlert("Login Successful", 'success');
-            history.push('/');
-
         } else {
             showAlert("Invalid Credentials", 'danger');
         }
@@ -37,9 +35,9 @@ const Login = ({showAlert}) => {// Using auth context api
     }
 
     if(loggedin){
-        return(
-            <Redirect to="/" />
-        )
+        setTimeout(() => {
+            history.push('/');
+        }, 1500);
     }
     return (
         <div className="col-md-4 m-auto">

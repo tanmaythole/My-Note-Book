@@ -19,6 +19,7 @@ const Home = ({showAlert}) => {
     // Fetch all notes
     useEffect(() => {
         getNotes();
+        // eslint-disable-next-line
     }, [])
 
     // Get Data of selected note
