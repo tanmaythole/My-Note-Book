@@ -25,6 +25,7 @@ const Login = ({showAlert}) => {// Using auth context api
             setLoggedin(true);
             setAuthToken(localStorage.getItem('auth-token'));
             showAlert("Login Successful", 'success');
+
         } else {
             showAlert("Invalid Credentials", 'danger');
         }
@@ -37,7 +38,7 @@ const Login = ({showAlert}) => {// Using auth context api
     if(loggedin){
         setTimeout(() => {
             history.push('/');
-        }, 1500);
+        }, 1);
     }
     return (
         <div className="col-md-4 m-auto">

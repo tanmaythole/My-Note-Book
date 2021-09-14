@@ -32,7 +32,6 @@ const Signup = ({showAlert}) => {
             setLoggedin(true);
             setAuthToken(localStorage.getItem('auth-token'));
             showAlert("SignUp Successful", 'success');
-            history.push('/');
         } else {
             showAlert("Invalid Data", 'danger');
         }
@@ -45,7 +44,7 @@ const Signup = ({showAlert}) => {
     if(loggedin){
         setTimeout(() => {
             history.push('/');
-        }, 1500);
+        }, 1);
     }
     return (
         <div className="col-md-4 m-auto">

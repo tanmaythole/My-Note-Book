@@ -22,7 +22,11 @@ const NoteState = (props) => {
       }
     });
     const json = await response.json();
-    setNotes(json);
+    await setNotes(json);
+    if(json.status==='ok'){
+      return true;
+    }
+    return false;
   }
 
   // Add a new Note

@@ -4,21 +4,25 @@ import { Row, Modal, Button, Form } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import AuthContext from '../context/auth/AuthContext';
 import NoteContext from '../context/notes/NoteContext';
+import Loader from './Loader';
 import NoteItem from './NoteItem';
 
 const Home = ({showAlert}) => {
     const context = useContext(NoteContext);
     const { notes, getNotes, editNote } = context;
-
+    
     const authContext = useContext(AuthContext);
     const {loggedin} = authContext;
-
+    
     const [show, setShow] = useState(false);
     const [currNote, setCurrNote] = useState({ "id": "", "title": "", "description": "", "tag": "" });
-
+    const [loading, setLoading] = useState(true);
+    
     // Fetch all notes
     useEffect(() => {
-        getNotes();
+        if(getNotes()){
+            setLoading(false);
+        }
         // eslint-disable-next-line
     }, [])
 
@@ -93,12 +97,17 @@ const Home = ({showAlert}) => {
             </Modal>
 
             <h1>My Notes</h1>
-            {notes.length===0 && "No Items to display"}
-            <Row className="py-2">
-                {notes.map((note) => {
-                    return <NoteItem key={note._id} updateNote={updateNote} showAlert={showAlert} note={note} />
-                })}
-            </Row>
+            {loading? <Loader />:(
+                <>
+                {console.log(notes)}
+                {notes.length===0 && "No Items to display"}
+                <Row className="py-2">
+                    {notes.map((note) => {
+                        return <NoteItem key={note._id} updateNote={updateNote} showAlert={showAlert} note={note} />
+                    })}
+                </Row>
+                </>
+            )}
         </div>
     )
 }
