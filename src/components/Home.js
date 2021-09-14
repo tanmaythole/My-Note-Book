@@ -99,7 +99,6 @@ const Home = ({showAlert}) => {
             <h1>My Notes</h1>
             {loading? <Loader />:(
                 <>
-                {console.log(notes)}
                 {notes.length===0 && "No Items to display"}
                 <Row className="py-2">
                     {notes.map((note) => {
