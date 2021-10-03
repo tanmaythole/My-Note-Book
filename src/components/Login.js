@@ -1,44 +1,35 @@
-import React, {useState, useContext } from 'react'
+import React, {useState } from 'react'
 import { Form, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import AuthContext from '../context/auth/AuthContext';
+import axiosInstance from '../axios';
 
-const Login = ({showAlert}) => {// Using auth context api
-    const authContext = useContext(AuthContext);
-    const { loggedin, setLoggedin, setAuthToken } = authContext;
+const Login = ({showAlert}) => {
 
     const [credentials, setCredentials] = useState({"email":"", "password":""});
 
     const history = useHistory();
     const handleLogin = async (e)=> {
         e.preventDefault();
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, {
-            method: "POST",
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(credentials)
-        });
-        const json = await response.json();
-        if(json.status==='ok'){
-            localStorage.setItem('auth-token', json.authToken);
-            setLoggedin(true);
-            setAuthToken(localStorage.getItem('auth-token'));
-            showAlert("Login Successful", 'success');
 
-        } else {
-            showAlert("Invalid Credentials", 'danger');
-        }
+        axiosInstance
+            .post(`accounts/token/`, {
+                email: credentials.email,
+                password: credentials.password
+            })
+            .then((res) => {
+                localStorage.setItem('access_token', res.data.access);
+                localStorage.setItem('refresh_token', res.data.refresh);
+                showAlert("Login Successful", 'success');
+                history.push('/');
+            })
     }
 
     const onchange = (e) => {
         setCredentials({...credentials, [e.target.name]:e.target.value});
     }
 
-    if(loggedin){
-        setTimeout(() => {
-            history.push('/');
-        }, 1);
+    if(localStorage.getItem('access_token')){
+        history.push('/');
     }
     return (
         <div className="col-md-4 m-auto">

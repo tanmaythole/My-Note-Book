@@ -8,7 +8,7 @@ const NoteItem = (props) => {
     const {deleteNote} = context;
     const { note, updateNote, showAlert } = props;
     const handleDelete = () => {
-        if(deleteNote(note._id)){
+        if(deleteNote(note.id)){
             showAlert("Note Deleted Successfully", "success");
         } else {
             showAlert("Something Went Wrong", "danger");

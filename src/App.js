@@ -1,5 +1,5 @@
 import './App.css';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import Navbar from './components/NavBar';
 import Home from './components/Home';
 import About from './components/About';
@@ -15,13 +15,10 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
-import AuthContext from './context/auth/AuthContext';
 
 function App() {
   const [alert, setAlert] = useState({"type":"", "message":""});
   
-  const context = useContext(AuthContext);
-  const { loggedin } = context;
 
   const showAlert = (message, type) => {
     setAlert({
@@ -49,7 +46,7 @@ function App() {
               <Route exact path="/signup">
                 <Signup showAlert={showAlert} />
               </Route>
-              {loggedin?(
+              {localStorage.getItem('access_token')?(
                 <Switch>
                   <Route exact path="/add">
                     <AddNote showAlert={showAlert} />

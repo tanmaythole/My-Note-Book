@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useContext, useEffect } from 'react';
 import { Row, Modal, Button, Form } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
-import AuthContext from '../context/auth/AuthContext';
 import NoteContext from '../context/notes/NoteContext';
 import Loader from './Loader';
 import NoteItem from './NoteItem';
@@ -11,8 +10,6 @@ const Home = ({showAlert}) => {
     const context = useContext(NoteContext);
     const { notes, getNotes, editNote } = context;
     
-    const authContext = useContext(AuthContext);
-    const {loggedin} = authContext;
     
     const [show, setShow] = useState(false);
     const [currNote, setCurrNote] = useState({ "id": "", "title": "", "description": "", "tag": "" });
@@ -56,7 +53,7 @@ const Home = ({showAlert}) => {
         toggleModal();
     }
 
-    if(!loggedin){
+    if(!localStorage.getItem('access_token')){
         return (
             <Redirect to="/login" />
         );

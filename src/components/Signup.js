@@ -1,13 +1,10 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom';
-import AuthContext from '../context/auth/AuthContext';
+import axiosInstance from '../axios';
 
 
 const Signup = ({showAlert}) => {
-    // Using auth context api
-    const authContext = useContext(AuthContext);
-    const { loggedin, setLoggedin, setAuthToken } = authContext;
 
     const [formData, setFormData] = useState({"name":"", "email":"", "password":"", "cpassword":""})
     
@@ -15,36 +12,27 @@ const Signup = ({showAlert}) => {
 
     const handleSignup = async (e)=> {
         e.preventDefault();
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/signup`, {
-            method:"POST",
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify({
-                "name":formData.name, 
-                "email":formData.email,
-                "password":formData.password
+        
+        axiosInstance
+            .post(`accounts/register/`, {
+                first_name: formData.name,
+                email: formData.email,
+                password: formData.password
             })
-        });
-        const json = await response.json();
-        if(json.status==="ok"){
-            localStorage.setItem('auth-token', json.authToken);
-            setLoggedin(true);
-            setAuthToken(localStorage.getItem('auth-token'));
-            showAlert("SignUp Successful", 'success');
-        } else {
-            showAlert("Invalid Data", 'danger');
-        }
+            .then((res) => {
+                localStorage.setItem('access_token', res.data.access);
+                localStorage.setItem('refresh_token', res.data.refresh);
+                showAlert(`Welcome ${res.data.user.first_name}, Your account created Successfully.`, 'succcess');
+                history.push('/');
+            })
     }
 
     const onchange = (e) => {
         setFormData({...formData, [e.target.name]:e.target.value})
     }
     
-    if(loggedin){
-        setTimeout(() => {
-            history.push('/');
-        }, 1);
+    if(localStorage.getItem('access_token')){
+        history.push('/');
     }
     return (
         <div className="col-md-4 m-auto">

@@ -1,100 +1,81 @@
 import NoteContext from "./NoteContext";
-import { useState, useContext } from "react";
-import AuthContext from "../auth/AuthContext";
+import { useState } from "react";
+import axiosInstance from "../../axios";
 
 
 
 const NoteState = (props) => {
-  const authContext = useContext(AuthContext);
-  const { authToken } = authContext;
   
   const initialNotes = [];
   const [notes, setNotes] = useState(initialNotes);
-  const BackendURL = process.env.REACT_APP_BACKEND_URL;
 
   // Fetching all notes
   const getNotes = async ()=>{
-    const response = await fetch(`${BackendURL}/api/notes/fetchallnotes`, {
-      method: 'GET',
-      headers: {
-        'Content-Type':'application/json',
-        'auth-token':authToken
-      }
-    });
-    const json = await response.json();
-    await setNotes(json);
-    if(json.status==='ok'){
-      return true;
-    }
-    return false;
+    
+    axiosInstance
+      .get(`notes`)
+      .then((res) => {
+        setNotes(res.data);
+      })
+    
   }
 
   // Add a new Note
   const addNote = async ({title, description, tag}) => {
-    const response = await fetch(`${BackendURL}/api/notes/add`, {
-      method: 'POST',
-      headers: {
-        'Content-Type':'application/json',
-        'auth-token':authToken
-      },
-      body: JSON.stringify({title, description, tag})
-    });
-    const json = await response.json();
-    if(json.status==='ok'){
-      return true;
-    }
-    return false;
+    
+    axiosInstance
+      .post(`notes`, {
+        title: title,
+        description: description,
+        tag: tag
+      })
+      .then((res) => {
+        return true;
+      })
+    
   }
 
   // Delete a Note
   const deleteNote = async (id) => {
-    const response = await fetch(`${BackendURL}/api/notes/delete/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type':'application/json',
-        'auth-token':authToken
-      }
-    });
-    const json = await response.json();
-    let newNotes = JSON.parse(JSON.stringify(notes));
-    for (let index = 0; index < newNotes.length; index++) {
-      const element = notes[index];
-      if(element._id===id){
-        newNotes.splice(index,1);
-        break;
-      }
-    }
-    setNotes(newNotes);
-    if(json.success){
-      return true;
-    }
-    return false;
+
+    axiosInstance
+      .delete(`notes/${id}`)
+      .then((res) => {
+        let newNotes = JSON.parse(JSON.stringify(notes));
+        for (let index = 0; index < newNotes.length; index++) {
+          const element = notes[index];
+          if(element.id===id){
+            newNotes.splice(index,1);
+            break;
+          }
+        }
+        setNotes(newNotes);
+        return true;
+      })
+
   }
 
   // Edit a Note
   const editNote = async (enote) => {
-    const response = await fetch(`${BackendURL}/api/notes/update/${enote._id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type':'application/json',
-        'auth-token':authToken
-      },
-      body: JSON.stringify({"title":enote.title, "description":enote.description, "tag":enote.tag})
-    });
-    const json = await response.json();
+    
+    axiosInstance
+      .put(`notes/${enote.id}/`, {
+        title: enote.title,
+        description: enote.description,
+        tag: enote.tag
+      })
+      .then((res) => {
+        let newNotes = JSON.parse(JSON.stringify(notes));
+        for (let index = 0; index < newNotes.length; index++) {
+          if(newNotes[index].id===enote.id){
+            newNotes[index]=res.data;
+            break;
+          }
+        }
+        setNotes(newNotes);
+        return true;
+      })
 
-    let newNotes = JSON.parse(JSON.stringify(notes));
-    for (let index = 0; index < newNotes.length; index++) {
-      if(newNotes[index]._id===enote._id){
-        newNotes[index]=json.note;
-        break;
-      }
-    }
-    setNotes(newNotes);
-    if(json.status==='ok'){
-      return true;
-    }
-    return false;
   }
 
   return(
