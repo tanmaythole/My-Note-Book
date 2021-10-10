@@ -6,18 +6,17 @@ import axiosInstance from "../../axios";
 
 const NoteState = (props) => {
   
-  const initialNotes = [];
-  const [notes, setNotes] = useState(initialNotes);
+  const [notes, setNotes] = useState([]);
 
   // Fetching all notes
-  const getNotes = async ()=>{
+  const getNotes = async (setLoading)=>{
     
     axiosInstance
       .get(`notes`)
       .then((res) => {
         setNotes(res.data);
+        setLoading(false);
       })
-    
   }
 
   // Add a new Note
@@ -66,14 +65,14 @@ const NoteState = (props) => {
       })
       .then((res) => {
         let newNotes = JSON.parse(JSON.stringify(notes));
+
         for (let index = 0; index < newNotes.length; index++) {
           if(newNotes[index].id===enote.id){
-            newNotes[index]=res.data;
+            newNotes[index]=res.data.data;
             break;
           }
         }
         setNotes(newNotes);
-        return true;
       })
 
   }

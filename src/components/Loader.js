@@ -7,7 +7,7 @@ const Loader = () => {
     return (
         <Row>
             {arr.map((e)=>{
-                return <div className="col-md-3 mb-4">
+                return <div key={e} className="col-md-3 mb-4">
                     <Card>
                         <Card.Body>
                             <Card.Title><Skeleton height="25px" width="80%" /></Card.Title>

@@ -41,7 +41,7 @@ const AddNote = ({showAlert}) => {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                    <Form.Label>Tages</Form.Label>
+                    <Form.Label>Tag</Form.Label>
                     <Form.Control type="text" id="tag" name="tag" onChange={onchange} />
                 </Form.Group>
 

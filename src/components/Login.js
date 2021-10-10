@@ -1,13 +1,11 @@
 import React, {useState } from 'react'
 import { Form, Button } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import axiosInstance from '../axios';
 
 const Login = ({showAlert}) => {
 
     const [credentials, setCredentials] = useState({"email":"", "password":""});
 
-    const history = useHistory();
     const handleLogin = async (e)=> {
         e.preventDefault();
 
@@ -20,7 +18,12 @@ const Login = ({showAlert}) => {
                 localStorage.setItem('access_token', res.data.access);
                 localStorage.setItem('refresh_token', res.data.refresh);
                 showAlert("Login Successful", 'success');
-                history.push('/');
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 2000);
+            })
+            .catch((err) => {
+                showAlert(err.response.data.detail, "danger");
             })
     }
 
@@ -28,9 +31,6 @@ const Login = ({showAlert}) => {
         setCredentials({...credentials, [e.target.name]:e.target.value});
     }
 
-    if(localStorage.getItem('access_token')){
-        history.push('/');
-    }
     return (
         <div className="col-md-4 m-auto">
             <h1 className="text-center">Login</h1>

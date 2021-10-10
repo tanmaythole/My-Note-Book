@@ -17,9 +17,7 @@ const Home = ({showAlert}) => {
     
     // Fetch all notes
     useEffect(() => {
-        if(getNotes()){
-            setLoading(false);
-        }
+        getNotes(setLoading);
         // eslint-disable-next-line
     }, [])
 
@@ -44,7 +42,8 @@ const Home = ({showAlert}) => {
     }
 
     // handle edit note function
-    const handleEditNote = async () => {
+    const handleEditNote = async (e) => {
+        e.preventDefault();
         if(editNote(currNote)){
             showAlert("Note Updated Successfully", "success");
         } else {
@@ -77,7 +76,7 @@ const Home = ({showAlert}) => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Tages</Form.Label>
+                            <Form.Label>Tag</Form.Label>
                             <Form.Control type="text" id="tag" name="tag" value={currNote.tag} onChange={onchange} />
                         </Form.Group>
 
@@ -94,12 +93,12 @@ const Home = ({showAlert}) => {
             </Modal>
 
             <h1>My Notes</h1>
-            {loading? <Loader />:(
+            {loading? <Loader key="loader" />:(
                 <>
                 {notes.length===0 && "No Items to display"}
                 <Row className="py-2">
                     {notes.map((note) => {
-                        return <NoteItem key={note._id} updateNote={updateNote} showAlert={showAlert} note={note} />
+                        return <NoteItem key={note.id} updateNote={updateNote} showAlert={showAlert} note={note} />
                     })}
                 </Row>
                 </>
