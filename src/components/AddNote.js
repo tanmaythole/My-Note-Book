@@ -2,9 +2,17 @@ import React, {useState} from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { useHistory } from "react-router";
 import axiosInstance from '../axios';
+import { useDispatch } from 'react-redux';
+import { actionCreators } from '../state';
+import { bindActionCreators } from 'redux';
 
 const AddNote = ({showAlert}) => {
     const history = useHistory();
+    
+    // Progress using redux
+    const dispatch = useDispatch();
+    const { setProgress } = bindActionCreators(actionCreators, dispatch);
+
 
     const [formData, setFormData] = useState({"title":"","description":"", "tags":""});
 
@@ -15,6 +23,7 @@ const AddNote = ({showAlert}) => {
 
     // handle add note form
     const handleAddNote = (e) => {
+        setProgress(20);
         e.preventDefault();
         axiosInstance
             .post(`notes`, {
@@ -23,8 +32,10 @@ const AddNote = ({showAlert}) => {
                 tag: formData.tag
             })
             .then((res) => {
+                setProgress(60);
                 showAlert("Note Added Successfully", "success");
                 history.push('/');
+                setProgress(100);
             })
             .catch((err) => {
                 showAlert(err.response.data.detail, "danger");

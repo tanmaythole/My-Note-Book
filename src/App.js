@@ -8,16 +8,25 @@ import { Container } from 'react-bootstrap';
 import AddNote from './components/AddNote';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import LoadingBar from 'react-top-loading-bar'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect
 } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionCreators } from './state';
+import { bindActionCreators } from 'redux';
 
 function App() {
   const [alert, setAlert] = useState({"type":"", "message":""});
-  
+
+  // progress using redux
+  const progress = useSelector(state => state.progress);
+  const dispatch = useDispatch();
+  const { setProgress } = bindActionCreators(actionCreators, dispatch);
+
 
   const showAlert = (message, type) => {
     setAlert({
@@ -31,6 +40,7 @@ function App() {
   return (
     <>
       <Router>
+          <LoadingBar color="red" progress={progress} onLoaderFinished={() => setProgress(0) } />
           <Navbar />
           <AlertComponent alert={alert} />
           <Container>

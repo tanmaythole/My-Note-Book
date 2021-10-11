@@ -6,3 +6,12 @@ export const setNotes = (notes) => {
         })
     }
 }
+
+export const setProgress = (progress) => {
+    return (dispatch) => {
+        dispatch({
+            type: 'progress',
+            payload: progress
+        })
+    }
+}

@@ -14,7 +14,7 @@ const Home = ({showAlert}) => {
     
     const notes = useSelector(state => state.notes);
     const dispatch = useDispatch();
-    const { setNotes } = bindActionCreators(actionCreators, dispatch);
+    const { setNotes, setProgress } = bindActionCreators(actionCreators, dispatch);
     
     const [show, setShow] = useState(false);
     const [currNote, setCurrNote] = useState({ "id": "", "title": "", "description": "", "tag": "" });
@@ -22,11 +22,14 @@ const Home = ({showAlert}) => {
     
     // Fetch all notes
     useEffect(() => {
+        setProgress(20);
         axiosInstance
             .get(`notes`)
             .then((res) => {
+                setProgress(50)
                 setNotes(res.data);
                 setLoading(false);
+                setProgress(100);
             })
         // eslint-disable-next-line
     }, [])
@@ -54,6 +57,7 @@ const Home = ({showAlert}) => {
     // handle edit note function
     const handleEditNote = async (e) => {
         e.preventDefault();
+        setProgress(20);
         await axiosInstance
             .put(`notes/${currNote.id}/`, {
                 title: currNote.title,
@@ -61,6 +65,7 @@ const Home = ({showAlert}) => {
                 tag: currNote.tag
             })
             .then((res) => {
+                setProgress(40);
                 let newNotes = JSON.parse(JSON.stringify(notes));
 
                 for (let index = 0; index < newNotes.length; index++) {
@@ -69,8 +74,10 @@ const Home = ({showAlert}) => {
                         break;
                     }
                 }
+                setProgress(60);
                 setNotes(newNotes);
                 showAlert("Note Updated Successfully", "success");
+                setProgress(100);
             })
             .catch((err) => {
                 showAlert(err.response.data.detail, "danger");
@@ -80,10 +87,14 @@ const Home = ({showAlert}) => {
 
     // delete a note
     const handleDelete = (id) => {
+        setProgress(20);
         axiosInstance
             .delete(`notes/${id}`)
             .then((res) => {
+                setProgress(40);
                 let newNotes = JSON.parse(JSON.stringify(notes));
+                setProgress(60);
+
                 for (let index = 0; index < newNotes.length; index++) {
                     const element = notes[index];
                     if(element.id===id){
@@ -91,8 +102,10 @@ const Home = ({showAlert}) => {
                         break;
                     }
                 }
+                setProgress(80);
                 setNotes(newNotes);
                 showAlert("Note Deleted Successfully", "success");
+                setProgress(100);
             })
             .catch((err) => {
                 showAlert(err.response.data.detail, "danger");

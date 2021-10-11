@@ -1,11 +1,12 @@
 import React, {useState } from 'react'
 import { Form, Button } from 'react-bootstrap';
+import { useHistory } from 'react-router';
 import axiosInstance from '../axios';
 
 const Login = ({showAlert}) => {
 
     const [credentials, setCredentials] = useState({"email":"", "password":""});
-
+    let history = useHistory();
     const handleLogin = async (e)=> {
         e.preventDefault();
 
@@ -14,13 +15,12 @@ const Login = ({showAlert}) => {
                 email: credentials.email,
                 password: credentials.password
             })
-            .then((res) => {
-                localStorage.setItem('access_token', res.data.access);
-                localStorage.setItem('refresh_token', res.data.refresh);
+            .then(async (res) => {
+                await localStorage.setItem('access_token', res.data.access);
+                await localStorage.setItem('refresh_token', res.data.refresh);
                 showAlert("Login Successful", 'success');
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 2000);
+                axiosInstance.defaults.headers['Authorization'] = 'JWT ' + res.data.access;
+                history.push('/');
             })
             .catch((err) => {
                 showAlert(err.response.data.detail, "danger");

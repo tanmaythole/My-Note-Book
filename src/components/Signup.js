@@ -1,16 +1,24 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom';
 import axiosInstance from '../axios';
+import { useDispatch } from 'react-redux';
+import { actionCreators } from '../state';
+import { bindActionCreators } from 'redux';
 
 
 const Signup = ({showAlert}) => {
 
     const [formData, setFormData] = useState({"name":"", "email":"", "password":"", "cpassword":""})
-    
+    let history = useHistory();
 
+    // progress using redux
+    const dispatch = useDispatch();
+    const { setProgress } = bindActionCreators(actionCreators, dispatch);
+    
     const handleSignup = async (e)=> {
         e.preventDefault();
-        
+        setProgress(20);
         axiosInstance
             .post(`accounts/register/`, {
                 first_name: formData.name,
@@ -18,15 +26,19 @@ const Signup = ({showAlert}) => {
                 password: formData.password
             })
             .then((res) => {
+                setProgress(40);
                 localStorage.setItem('access_token', res.data.access);
                 localStorage.setItem('refresh_token', res.data.refresh);
+                setProgress(60);
                 showAlert(`Welcome ${res.data.user.first_name}, Your account created Successfully.`, 'succcess');
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 2000);
+                axiosInstance.defaults.headers['Authorization'] = 'JWT ' + res.data.access;
+                setProgress(90);
+                history.push('/');
+                setProgress(100);
             })
             .catch((err) => {
                 showAlert(err.response.data.email, "danger");
+                setProgress(100);
             })
     }
 

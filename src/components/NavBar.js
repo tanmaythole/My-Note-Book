@@ -2,16 +2,15 @@ import React from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 const NavBar = () => {
-
-    const handleLogout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        setTimeout(() => {
-            window.location.href = '/';
-        }, 1000);
+    let history = useHistory();
+    
+    const handleLogout = async () => {
+        await localStorage.removeItem('access_token');
+        await localStorage.removeItem('refresh_token');
+        history.push('/login');
     }
     return (
         <div>
