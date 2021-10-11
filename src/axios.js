@@ -39,10 +39,9 @@ axiosInstance.interceptors.response.use(
                 const now = Math.ceil(Date.now() / 1000);
                 if(exp > now){
                     return axiosInstance
-                            .post(`token/refresh/`, {refresh:refreshToken})
+                            .post(`accounts/token/refresh/`, {refresh:refreshToken})
                             .then((res) => {
                                 localStorage.setItem('access_token', res.data.access);
-                                localStorage.setItem('refresh_token', res.data.refresh);
 
                                 axiosInstance.defaults.headers['Authorization'] =
                                     'JWT ' + res.data.access;

@@ -1,15 +1,20 @@
 import React, { useState } from 'react'
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Row, Modal, Button, Form } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import NoteContext from '../context/notes/NoteContext';
 import Loader from './Loader';
 import NoteItem from './NoteItem';
+import axiosInstance from '../axios';
+import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from '../state';
 
 const Home = ({showAlert}) => {
-    const context = useContext(NoteContext);
-    const { notes, getNotes, editNote } = context;
     
+    const notes = useSelector(state => state.notes);
+    const dispatch = useDispatch();
+    const { setNotes } = bindActionCreators(actionCreators, dispatch);
     
     const [show, setShow] = useState(false);
     const [currNote, setCurrNote] = useState({ "id": "", "title": "", "description": "", "tag": "" });
@@ -17,7 +22,12 @@ const Home = ({showAlert}) => {
     
     // Fetch all notes
     useEffect(() => {
-        getNotes(setLoading);
+        axiosInstance
+            .get(`notes`)
+            .then((res) => {
+                setNotes(res.data);
+                setLoading(false);
+            })
         // eslint-disable-next-line
     }, [])
 
@@ -44,13 +54,50 @@ const Home = ({showAlert}) => {
     // handle edit note function
     const handleEditNote = async (e) => {
         e.preventDefault();
-        if(editNote(currNote)){
-            showAlert("Note Updated Successfully", "success");
-        } else {
-            showAlert("Something Went Wrong", "danger");
-        }
+        await axiosInstance
+            .put(`notes/${currNote.id}/`, {
+                title: currNote.title,
+                description: currNote.description,
+                tag: currNote.tag
+            })
+            .then((res) => {
+                let newNotes = JSON.parse(JSON.stringify(notes));
+
+                for (let index = 0; index < newNotes.length; index++) {
+                    if(newNotes[index].id===currNote.id){
+                        newNotes[index]=res.data.data;
+                        break;
+                    }
+                }
+                setNotes(newNotes);
+                showAlert("Note Updated Successfully", "success");
+            })
+            .catch((err) => {
+                showAlert(err.response.data.detail, "danger");
+            })
         toggleModal();
     }
+
+    // delete a note
+    const handleDelete = (id) => {
+        axiosInstance
+            .delete(`notes/${id}`)
+            .then((res) => {
+                let newNotes = JSON.parse(JSON.stringify(notes));
+                for (let index = 0; index < newNotes.length; index++) {
+                    const element = notes[index];
+                    if(element.id===id){
+                        newNotes.splice(index,1);
+                        break;
+                    }
+                }
+                setNotes(newNotes);
+                showAlert("Note Deleted Successfully", "success");
+            })
+            .catch((err) => {
+                showAlert(err.response.data.detail, "danger");
+            })
+        }
 
     if(!localStorage.getItem('access_token')){
         return (
@@ -98,7 +145,7 @@ const Home = ({showAlert}) => {
                 {notes.length===0 && "No Items to display"}
                 <Row className="py-2">
                     {notes.map((note) => {
-                        return <NoteItem key={note.id} updateNote={updateNote} showAlert={showAlert} note={note} />
+                        return <NoteItem key={note.id} updateNote={updateNote} handleDelete={handleDelete} note={note} />
                     })}
                 </Row>
                 </>

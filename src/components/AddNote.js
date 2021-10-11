@@ -1,12 +1,10 @@
-import React, {useContext, useState} from 'react'
+import React, {useState} from 'react'
 import { Form, Button } from 'react-bootstrap'
-import NoteContext from '../context/notes/NoteContext'
 import { useHistory } from "react-router";
+import axiosInstance from '../axios';
 
 const AddNote = ({showAlert}) => {
-    const context = useContext(NoteContext);
     const history = useHistory();
-    const {addNote} = context;
 
     const [formData, setFormData] = useState({"title":"","description":"", "tags":""});
 
@@ -18,13 +16,19 @@ const AddNote = ({showAlert}) => {
     // handle add note form
     const handleAddNote = (e) => {
         e.preventDefault();
-        if(addNote(formData)){
-            showAlert("Note Added Successfully", "success");
-            history.push('/');
-        }
-        else{
-            showAlert("Something Went Wrong", "danger");
-        }
+        axiosInstance
+            .post(`notes`, {
+                title: formData.title,
+                description: formData.description,
+                tag: formData.tag
+            })
+            .then((res) => {
+                showAlert("Note Added Successfully", "success");
+                history.push('/');
+            })
+            .catch((err) => {
+                showAlert(err.response.data.detail, "danger");
+            })
     }
     return (
         <div className="col-md-6 m-auto">

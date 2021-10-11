@@ -4,7 +4,6 @@ import Navbar from './components/NavBar';
 import Home from './components/Home';
 import About from './components/About';
 import AlertComponent from './components/AlertComponent';
-import NoteState from './context/notes/NoteState';
 import { Container } from 'react-bootstrap';
 import AddNote from './components/AddNote';
 import Login from './components/Login';
@@ -31,7 +30,6 @@ function App() {
   }
   return (
     <>
-    <NoteState>
       <Router>
           <Navbar />
           <AlertComponent alert={alert} />
@@ -64,7 +62,6 @@ function App() {
             </Switch>
           </Container>
       </Router>
-    </NoteState>
     </>
   );
 }

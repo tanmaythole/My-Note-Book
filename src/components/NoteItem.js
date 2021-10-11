@@ -1,19 +1,9 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Card, Button, Badge } from 'react-bootstrap';
 import {FaEdit, FaTrashAlt} from 'react-icons/fa';
-import NoteContext from '../context/notes/NoteContext';
 
-const NoteItem = (props) => {
-    const context = useContext(NoteContext);
-    const {deleteNote} = context;
-    const { note, updateNote, showAlert } = props;
-    const handleDelete = () => {
-        if(deleteNote(note.id)){
-            showAlert("Note Deleted Successfully", "success");
-        } else {
-            showAlert("Something Went Wrong", "danger");
-        }
-    }
+const NoteItem = ({ note, updateNote, handleDelete }) => {
+
     return (
         <div className="col-md-3 mb-4">
             <Card>
@@ -29,7 +19,7 @@ const NoteItem = (props) => {
                         <Badge bg="success">{note.tag}</Badge>
                     </div>
                     <Button variant="primary" size="sm" onClick={()=>updateNote(note)}><FaEdit /></Button>{' '}
-                    <Button variant="danger" size="sm" onClick={handleDelete}><FaTrashAlt /></Button>
+                    <Button variant="danger" size="sm" onClick={() => handleDelete(note.id)}><FaTrashAlt /></Button>
                 </Card.Body>
             </Card>
         </div>
